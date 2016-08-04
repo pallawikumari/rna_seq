@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#Create_NGS_DirectoryStructureV2.sh
+#Written by Jonathan Keats 04/12/2010
+
+echo ***Creating Pipeline Directory Structure***
+mkdir -p ngs/analysisnotes ngs/applicationdownloads ngs/bamfiles/merged ngs/bamfiles/original ngs/bamfiles/sorted ngs/finaloutputs/alignmentresults ngs/finaloutputs/illumina/read1 ngs/finaloutputs/illumina/read2 ngs/finaloutputs/mergedbamfiles ngs/finaloutputs/sangerfastq ngs/finaloutputs/sortedbamfiles ngs/inputsequences/illumina/read1 ngs/inputsequences/illumina/read2 ngs/inputsequences/sangerfastq ngs/refgenomes/bfast_indexed ngs/refgenomes/bowtie_indexed ngs/refgenomes/bwa_indexed ngs/refgenomes/genomedownloads ngs/samfiles ngs/scripts/scriptbackups
+cp Create_NGS_DirectoryStructureV2.sh ngs/scripts/scriptbackups/
+echo ***Pipeline Directory Structure Created***
