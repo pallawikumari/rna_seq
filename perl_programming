@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+print "***Creating Pipeline Directory Structure***\n"; # \n is newline
+my $root="NGS";
+system("mkdir $root");
+
+# this line only makes directories with no subdirectories
+&makeSubdirs($root,
+                          "AnalysisNotes", "ApplicationDownloads",
+                          "InputSequence","SAMfiles");
+&makeSubdirs("$root/BAMfiles","Merged","Original","Sorted");
+&makeSubdirs("$root/FinalOutputs",
+                     "AlignmentResults","Illumina","SangerFasta",
+                       "SortedBAMfiles","MergedBAMfiles");
+&makeSubdirs("$root/RefGenomes",
+                   "BFAST_Indexed","BOWTIE_Indexed","GenomeDownloads");
+&makeSubdirs("$root/Scripts","ScriptBackups");  # DANGEROUS!!!
+print "Pipeline Directory Structure Created\n";
+
+sub makeSubdirs
+{
+  my @subdirs=@_;
+  my $parentDir=shift(@subdirs);
+  mkdir($parentDir) if (! -d $parentDir);
+  foreach my $subDir(@subdirs)
+  {
+     mkdir("$parentDir/$subDir");
+  }
+}
+
+#cd ../Scripts
+#mkdir ScriptBackups
+#cd ../..
+#cp Create_NGS_DirectoryStructureV1.sh NGS/Scripts/ScriptBackups/
+#cd NGS/
+#pwd
