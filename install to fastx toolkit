@@ -1,0 +1,89 @@
+Time to Git a Linux Machine
+
+I'm slowly getting back up and running after moving from my post-doc to an independent position. Other than learning how damn expensive everything is I'm slowly deciding that I should swear off the idea of a new MacPro workstation for a Linux workstation given all the issues I seem to run into with the "not quite so standard Mac OSX10.6 implementation of Unix". But with the idea of sharing my ongoing experiences and a trail I can follow to build my next machine I thought I'd update my thread. I hope some people have found it useful...
+
+Some new idea's and an update
+
+1) I'm becoming increasing certain that I'm getting good enough at command line issues to REALLY mess up my system
+2) My list of used programs continues to increase as I try each new sequencing method
+3) As per issue 1 - I'm also not reading instructions very well. New Rule - If at first you don't succeed...Go back and read the damn instructions again because most likely you didn't follow them correctly!
+
+New Applications to Install
+
+As previously stated in the post if you are using a Mac OS environment you need to do a couple of special things
+
+A) Install Xcode on your system (See earlier post)
+B) Install Fink on your system (See earlier post)
+- install the following fink packages:md5deep and pkgconfig
+- "fink install md5deep" (needed for bfast install)
+- "fink install pkgconfig" (needed for fastx-toolkit install)
+C) Install Git on your system (http://git-scm.com/)
+D) Create a $PATH Directory and update this directory in your .profile (See earlier post for instructions)
+- In my case "$HOME/local/bin"
+
+1) Install FASTX-Toolkit (http://hannonlab.cshl.edu/fastx_toolkit/)
+
+***Why did I get this package***
+Because I have some illumina mate-pair data that I want to analyze with BWA using sampe but the reads need to be reverse complemented to work correctly by my understanding so I'm using the fastx_reverse_complement application in the package that seems to be very fast and correctly reverse complements the reads and reverses the quality values
+
+Instructions:
+- Go to download page and download the following:
+a) fastx_toolkit-0.0.13.tar.bz2
+b) libgtextutils-0.6.tar.bz2
+- Move both to ngs/applications folder and unpack both packages
+- In Terminal navigate the libgtextutils folder "cd ngs/applications/libtestutils-0.6"
+- Install the package as follows: 
+./configure
+make 
+sudo make install (this will ask for your password, must be admin level privileged set)
+
+- Move to fastx_toolkit folder "cd ../fastx_toolkit-0.0.13"
+- Install the package as follows: 
+./configure --prefix=$HOME/local/bin
+make
+make install
+
+- Test install by typing "fastx_uncollapser -h", this should pop up a usage documentation for this app
+
+2) Install Bfast, DNAA, and Breakway
+
+*** Why these packages***
+As you might guess from the above install I now have some mate-pair data and want to try out the Breakway package from the UCLA group but it depends on two of their other packages Bfast and DNAA
+
+Bfast - This package seems to be the vain of my existence but thankfully Nils and the helplist have been amazingly helpful
+
+Mac Related Issues: 
+a) You must have fink and have installed the md5deep package otherwise "make check" will fail
+b) The current sourceforge version (0.6.4e) does not install correctly thought the previous version does, however, this is a known issue and has been fixed in the master branch (if that's a new term to you we are in the same boat) but this mean you need to use the git repository version
+c) Using ".configure -prefix=$HOME/local" works but makes DNAA mad when you install it so use sudo (time to be superman again)
+
+Instructions:
+a) In Terminal navigate to ngs/applications
+b) Get current Bfast version from Git (restart Terminal after git installation)
+- type "git clone git://bfast.git.sourceforge.net/gitroot/bfast/bfast"
+- this will create a folder called "bfast" in the current directory
+- Move into the directory "cd bfast"
+- Install bfast by typing the following:
+sh autogen.sh
+./configure
+make
+make check
+sudo make install (requests a password with admin level privileges)
+
+- Test install and check current version by typing "bfast" in Terminal
+
+c) Navigate back to ngs directory by typing "cd ../"
+d) Get current version of DNAA from Git
+- type "git clone git://dnaa.git.sourceforge.net/gitroot/dnaa/dnaa dnaa"
+- this will create a directory named "dnaa" in the current directory (ngs/applications)
+- move into the the dnaa directory by typing "cd dnaa"
+e) Because this package depends on both BFAST and SAMTOOLS you need to provide links to these application directories even though you already have them in a $PATH directory (/usr/local/bin and $HOME/local/bin repectively)
+- create a link to the BFAST package you just installed by typing "ln -s ../bfast bfast"
+- create a link to your current SAMTOOLS package by typing "ln -s ../samtools-0.1.8 samtools"
+f) Install DNAA by typing the following: 
+sh autogen.sh
+./configure
+make
+sudo make install (requests a password with admin level privileges)
+
+g) Download current version of BREAKWAY from sourceforge (http://sourceforge.net/projects/breakway/), move it to the ngs/applications folder and unpack it and you should be ready to go
