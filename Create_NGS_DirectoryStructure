@@ -1,0 +1,63 @@
+#Up till now I've been frustrated because I could not automate a variety of pairing steps that occur as I process raw data to BAM files. 
+#This is usually either in the SAMPE step of BWA or when I wanted to merge multiple lanes into one BAM file. I think I convinced myself 
+#that I can just use the "cat" function to merge the multiple lanes together before processing, which ends up being a simple solution as
+#long as all the lanes are available at the same time. For the SAMPE pairing I spent sometime with my Unix guru from France when he came 
+#over to visit his wife and I seem to have a workable solution as long as a specific file tree structure is used in conjunction with two
+#unix scripts, one that processes each pair from raw data to two sort BAM files, one with and without duplicates, and a second that pulls 
+#each sample into the analysis framework and launches the aforementioned script. So since this requires a specific directory structure
+#I've updated my directory structure script to version 3.
+
+#!/bin/sh
+
+# Create_NGS_DirectoryStructure_V3.sh
+# 
+#
+# Created by Jonathan Keats on 9/3/10 based on suggestion from Ryan Golhar on my Seqanswers thread.
+# Translational Genomics Research Institute
+#
+#########################################################################
+#  CREATES A DIRECTORY STURCTURE TO SUPPORT A VARIETY OF NGS PIPELINES  #
+#########################################################################
+#
+# Designed for a Mac OS enviroment and requires initiation from your home folder (/User/You/)
+
+# Check to confirm current location is $HOME/ (ie. /User/You/)
+
+echo "Confirming Script Initiation Directory"
+var1=$HOME
+if [ "`pwd`" != "$var1" ] 
+	then 
+	echo " The script must be launched from your home directory "
+	echo " The script was automatically killed due to a launch error - See Above Error Message" 
+	exit 2                              
+fi
+echo "1) Launch Location is Correct ($HOME/)"
+
+# Create required directories to support pipelines (BWAse, BWApe, and others to come...)
+
+echo ***Creating Pipeline Directory Structure***
+mkdir -p ngs/{analysisnotes,applications,scripts}
+mkdir -p ngs/refgenomes/{bfast_indexed,bowtie_indexed,bwa_indexed,genome_downloads}
+mkdir -p ngs/refgenomes/genome_downloads/{hg18,hg19}
+mkdir -p ngs/finaloutputs/{alignmentresults_bwa,illumina,sangerfastq}
+mkdir -p ngs/finaloutputs/bamfiles/{merged,sorted,nodups}
+mkdir -p ngs/bwase/inputsequences/{illumina,sangerfastq}
+mkdir -p ngs/bwase/samfiles
+mkdir -p ngs/bwase/bamfiles/{merged,original,sorted,nodups}
+mkdir -p ngs/bwape/samfiles
+mkdir -p ngs/bwape/bamfiles/{merged,original,sorted,nodups}
+mkdir -p ngs/bwape/inputsequences/{illumina,sangerfastq,hold}
+mkdir -p ngs/bwape/inputsequences/illumina/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/sangerfastq/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/{lane1,lane2,lane3,lane4,lane5,lane6,lane7,lane8}
+mkdir -p ngs/bwape/inputsequences/hold/lane1/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane2/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane3/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane4/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane5/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane6/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane7/{read1,read2}
+mkdir -p ngs/bwape/inputsequences/hold/lane8/{read1,read2}
+
+mv create_ngs_directorystructure_v3.sh ngs/scripts/
+echo ***Pipeline Directory Structure Created***
