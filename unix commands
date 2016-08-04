@@ -1,0 +1,13 @@
+#Here is a general list of helpful Unix commands:
+To get a manual on any command, type "man command". Type "space" to page down, "b" to back-up, and "q" to quit.
+To see what folder you are in currently, type "pwd".
+To see what folders and files exist in the current directory, type "ls".
+To move into a folder in the current directory, type "cd myfolder". (Note: You can move multiple levels downstream with "cd myfolder/myfolder2".)
+To go back one directory, type "cd ..". (Note: You can move back multiple levels upstream with "cd ../..".)
+To copy a file from the current directory to a downstream folder, type "cp myfile myfolder/". (Note: You can copy a file up one directory with "cp myfile ../".)
+To move a file from the current directory, type "mv" instead of typing “cp”.
+A folder immediately downstream of the root directory (i.e. absolute top of the tree) is always defined by "command /folder". (This means if you type "cd /something", it looks for the folder "something" downstream of the root directory.)
+To note the current directory, type ".".
+To change the permissions of the compiled applications, type "chmod 755 myfile". (This makes the file readable and executable by everyone but only writable by you. To allow everybody to do everything to the file, type “chmod 777 myfile”.)
+To become a super user for a particular command (and become Superman!), type “sudo”.
+To decompress a tarball file, type “tar -xvzf file.tar.gz”, where “file.tar.gz” is the decompressed file.
