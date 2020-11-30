@@ -1,0 +1,19 @@
+E: Could not get lock /var/lib/dpkg/lock - open (11 Resource temporarily unavailable)
+E: Unable to lock the administration directory (/var/lib/dpkg/) is another process using it?
+Error
+kill -9 <PID> (get <PID> from lsof 
+You can delete the lock file with the following command:
+sudo rm /var/lib/apt/lists/lock
+
+
+You may also need to delete the lock file in the cache directory
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+
+
+After that, try opening Synaptic again.
+
+#Warning in install.packages :  package ‘cowplot’ is not available (for R version 3.3.3)
+install.packages('package_name', dependencies=TRUE, repos='http://cran.rstudio.com/')
+
+#
