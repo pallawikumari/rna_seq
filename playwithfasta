@@ -1,0 +1,3 @@
+#To remove header of fasta file
+sed '/^>/d' foo.fa > out.fa
+
