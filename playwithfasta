@@ -103,3 +103,5 @@ Os01g0102500	ONIVA07G16830	27.7108
 
 #fasta comparison with txt file
 $awk 'NR==FNR{m[">"$1]=$2;next} {sub(/^>/,"&"m[$0])} 1' txt.file fasta.file
+
+
