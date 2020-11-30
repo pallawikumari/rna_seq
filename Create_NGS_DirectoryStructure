@@ -6,7 +6,7 @@
 #unix scripts, one that processes each pair from raw data to two sort BAM files, one with and without duplicates, and a second that pulls 
 #each sample into the analysis framework and launches the aforementioned script. So since this requires a specific directory structure
 #I've updated my directory structure script to version 3.
-
+################
 #!/bin/sh
 
 # Create_NGS_DirectoryStructure_V3.sh
