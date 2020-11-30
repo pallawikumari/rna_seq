@@ -21,7 +21,7 @@
 #		Click "File" and select "Save"
 #		Close the file, which should already be executable
 # Regardless of Option used - type "./Create_NGS_DirectoryStructureV1.sh" to launch
-
+#
 echo ***Creating Pipeline Directory Structure***
 pwd
 ls
