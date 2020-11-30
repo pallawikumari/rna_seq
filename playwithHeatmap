@@ -1,0 +1,101 @@
+###To know how many data are there in each cluster
+HM <- Heatmap(cbioportal, km = 3)
+rcl.list <- row_order(HM)
+lapply(rcl.list, function(x) length(x))
+
+#########################_Heatmap cancer_########################
+---
+title: "20march2019"
+output: html_document
+---
+```{r}
+OVARY <- read.csv(file = "mRNA_Exp_ovary.z_t.csv", sep = ",", header = TRUE)
+OVARY_matrix <- data.matrix(OVARY[ ,c(2:ncol(OVARY))])
+rownames(OVARY_matrix) <- OVARY$SYMBOL
+#OVARY[1] <- NULL
+#z.mat1 <- t(scale(t(OVARY_matrix), center=TRUE, scale=TRUE))
+#z.OVARY_mat <- scale(OVARY_matrix)
+mycols <- colorRamp2(breaks = c(-2, 0, 2), colors = c("blue", "white", "red"))
+Heatmap(OVARY_matrix, show_row_dend = FALSE, show_column_dend = FALSE, row_names_side = "left", row_names_gp = gpar(fontsize = 12),  name = "", column_title = " ", col = mycols, raster_device = "CairoTIFF", raster_quality = 2, clustering_distance_rows = "euclidean", clustering_method_rows = "complete", clustering_distance_columns = "euclidean", clustering_method_columns = "complete")
+```
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+library(ggplot2)
+```
+
+```{r}
+OVARY <- read.csv(file = "cellline_mRNA_Exp_list_9.csv", sep = ",", header = TRUE)
+OVARY_matrix <- data.matrix(OVARY[ ,c(2:ncol(OVARY))])
+rownames(OVARY_matrix) <- OVARY$SYMBOL
+#OVARY[1] <- NULL
+#z.mat1 <- t(scale(t(OVARY_matrix), center=TRUE, scale=TRUE))
+#z.OVARY_mat <- scale(OVARY_matrix)
+mycols <- colorRamp2(breaks = c(-2, 0, 2), colors = c("blue", "white", "red"))
+Heatmap(OVARY_matrix, show_row_dend = FALSE, show_column_dend = FALSE, row_names_side = "left", row_names_gp = gpar(fontsize = 12),  name = "", column_title = " ", col = mycols, raster_device = "CairoTIFF", raster_quality = 2, clustering_distance_rows = "euclidean", clustering_method_rows = "complete", clustering_distance_columns = "euclidean", clustering_method_columns = "complete")
+```
+
+######################GGPLOT2-HM-3##########################
+```{r}
+OV_CAN <- read.csv(file = "CNA_Values_absolute.csv", sep = ",", header = TRUE, check.names = FALSE)
+#data1 <- as.matrix(OV_CAN[, -c(2:ncol(OV_CAN))])
+#OV_CAN.M <- data.frame(OV_CAN[, c(2:ncol(OV_CAN))])
+OV_CAN.M <- data.frame(OV_CAN)
+#rownames(OV_CAN.M) <- OV_CAN$SYMBOL
+OV_CAN.M_MELT <- melt(OV_CAN.M)
+#OV_CAN.M_MELT$fill <- "white"
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value < 1.5] <-"white"
+#OV_CAN.M_MELT$fill <- rep("white")
+
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value > 2.5] <- "red"
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value >= 1.5 & OV_CAN.M_MELT$value <= 2.5] <- "blue"
+p<- ggplot(OV_CAN.M_MELT, aes(variable, SYMBOL, fill=fill)) + geom_tile()
+p + scale_fill_identity(expand=c(0,0), guide = "legend", labels=c("depletion","amplification", "normal"))
+```
+######################cBioportal_gene_expression-HM-4################
+```{r}
+cbioportal_nc <- read.csv(file = "../cBioportal/mRNA_exp.z.csv", header = TRUE, sep = ",")
+cbioportal <- as.matrix(cbioportal_nc[ ,c(2:ncol(cbioportal_nc))])
+rownames(cbioportal) <- cbioportal_nc$SAMPLE_ID
+mycols <- colorRamp2(breaks = c(-2, 0, 2), colors = c("blue", "white", "red"))
+cbioportal_t <- t(cbioportal)
+Heatmap(cbioportal_t, col = mycols, show_column_names = FALSE, clustering_distance_columns = "euclidean", clustering_distance_rows = "euclidean", name = "", row_names_side = "left", show_column_dend = FALSE, show_row_dend = FALSE)
+```
+######################cBioportal_gene_expression-HM-4################
+```{r}
+cbioportal_nc <- read.csv(file = "../cBioportal/CNA.csv", header = TRUE, sep = ",")
+cbioportal <- as.matrix(cbioportal_nc[ ,c(2:ncol(cbioportal_nc))])
+rownames(cbioportal) <- cbioportal_nc$SAMPLE_ID
+mycols <- colorRamp2(breaks = c(-1, 0, 1), colors = c("blue", "white", "red"))
+cbioportal_t <- t(cbioportal)
+Heatmap(cbioportal_t, col = mycols, show_column_names = FALSE, clustering_distance_columns = "euclidean", clustering_distance_rows = "euclidean", name = "", row_names_side = "left", show_column_dend = FALSE, show_row_dend = FALSE, raster_quality = 2, use_raster = FALSE, raster_device = c("png", "jpeg", "tiff", "CairoPNG", "CairoJPEG", "CairoTIFF"), raster_device_param = list())
+```
+##########################GGPLOT2-HM-5#############################
+```{r}
+OV_CAN <- read.csv(file = "../cBioportal/CNA.csv", sep = ",", header = TRUE, check.names = FALSE)
+OV_CAN.M <- data.frame(OV_CAN)
+OV_CAN.M_MELT <- melt(OV_CAN.M)
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value == -1] <-"white"
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value == 0] <- "blue"
+OV_CAN.M_MELT$fill[OV_CAN.M_MELT$value == 1] <- "red"
+p<- ggplot(OV_CAN.M_MELT, aes(variable, SAMPLE_ID, fill=fill)) + geom_tile()
+p + scale_fill_identity(expand=c(0,0), guide = "legend", labels=c("depletion","amplification", "normal"))
+```
+######################cBioportal_gene_expression-HM-4################
+```{r}
+cbioportal_nc <- read.csv(file = "../cBioportal/mRNA_exp.z.csv", header = TRUE, sep = ",")
+cbioportal_nc[4] <- NULL
+#data <- as.matrix(cbioportal_nc(,-c[4]))
+cbioportal <- as.matrix(cbioportal_nc[ ,c(2:ncol(cbioportal_nc))])
+rownames(cbioportal) <- cbioportal_nc$SAMPLE_ID
+mycols <- colorRamp2(breaks = c(-2, 0, 2), colors = c("blue", "white", "red"))
+#cbioportal_t <- t(cbioportal)
+HM <- Heatmap(cbioportal, col = mycols, clustering_distance_columns = "euclidean", clustering_distance_rows = "euclidean", name = "", row_names_side = "left", show_column_dend = FALSE, show_row_dend = FALSE, row_names_gp = gpar(fontsize = 4))
+```
+lapply(rcl.list, function(x) length(x))
+rcl.list <- row_order(HM)
+mycols <- colorRamp2(breaks = c(-2, 0, 2), colors = c("blue", "white", "red"))
+HM <- Heatmap(cbioportal, km = 3, col = mycols, row_names_gp = gpar(fontsize = 3), name = "")
+###To know how many data are there in each cluster
+rcl.list <- row_order(HM)
+lapply(rcl.list, function(x) length(x))
