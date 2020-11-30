@@ -1,0 +1,46 @@
+RAW_DATA=/data2/Live_Project/Mouse/Raw_reads
+OUTPUT=/data2/Live_Project/Mouse/Analysis/Mouse/ensembl_analysis
+ANNOTATION=/data2/Live_Project/Mouse/Analysis/Mouse/ensembl_analysis/index_ensembl/Mus_musculus.GRCm38.96.gtf
+INDEX_DATA=/data2/Live_Project/Mouse/Analysis/Mouse/ensembl_analysis/index_ensembl/Mus_musculus.GRCm38.dna.toplevel
+HISAT2=/data1/softwares/hisat2-2.1.0/hisat2
+CUFFLINKS=/data1/softwares/cufflinks-2.2.1.Linux_x86_64/cufflinks
+
+for i in $(ls *1_001.fastq | rev |cut -c 12-| rev |uniq)
+
+do
+#hisat2 analysis
+date
+$HISAT2 -p 2 --mp 3 --rdg 3 -x $INDEX_DATA -1 $RAW_DATA/${i}1_001.fastq -2 $RAW_DATA/${i}2_001.fastq --summary-file $OUTPUT/${i}_align_summary.txt | samtools view -bSu - | samtools sort -o $OUTPUT/hisat_out/${i}_001.bam
+#date
+#samtools sort -@ 35 -o $OUTPUT/${i}_001.sam $OUTPUT/${i}_001.bam
+#date
+#stringtie -p 15 -G $GTF_DATA -o $OUTPUT/${i}.gtf $OUTPUT/SORTING/${i}.bam
+$CUFFLINKS -p 2 --library-type fr-firststrand -G $ANNOTATION -o $OUTPUT/cufflinks_out/${i}_001 $OUTPUT/hisat_out/${i}_001.bam
+#date
+done
+
+
+RAW_DATA=$pwd/Raw_reads
+OUTPUT=$pwd/ensembl_analysis
+ANNOTATION=$pwd/ensembl_analysis/index_ensembl/Mus_musculus.GRCm38.96.gtf
+INDEX_DATA=$pwd/ensembl_analysis/index_ensembl/Mus_musculus.GRCm38.dna.toplevel
+HISAT2=$pwd/hisat2-2.1.0/hisat2
+CUFFLINKS=$pwd/cufflinks-2.2.1.Linux_x86_64/cufflinks
+
+for i in $(ls *1_001.fastq | rev |cut -c 12-| rev |uniq)
+
+do
+#hisat2 analysis
+date
+$HISAT2 -p 2 --mp 3 --rdg 3 -x $INDEX_DATA -1 $RAW_DATA/${i}1_001.fastq -2 $RAW_DATA/${i}2_001.fastq --summary-file $OUTPUT/${i}_align_summary.txt | samtools view -bSu - | samtools sort -o $OUTPUT/hisat_out/${i}_001.bam
+#date
+#samtools sort -@ 35 -o $OUTPUT/${i}_001.sam $OUTPUT/${i}_001.bam
+#date
+stringtie -p 8 -G chrX_data/genes/chrX.gtf -o ERR188044_chrX.gtf –l ERR188044 ERR188044_chrX.ba
+stringtie -p 15 -G $GTF_DATA -o $OUTPUT/${i}.gtf $OUTPUT/${i}.bam
+#$CUFFLINKS -p 2 --library-type fr-firststrand -G $ANNOTATION -o $OUTPUT/cufflinks_out/${i}_001 $OUTPUT/hisat_out/${i}_001.bam
+#date
+done
+
+
+
