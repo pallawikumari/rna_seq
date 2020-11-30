@@ -1,0 +1,55 @@
+#path of the directory of raw read sequences and output of analysis
+#retrive protein ids from hmm profile
+
+RAW_DATA=input_file/raw_data
+ANALYSIS_PATH=input_file/STAR_ANALYSED_DATA/
+STAR_GENOME_INDX_DIR=input_file/STAR_ANALYSED_DATA/index/star_index
+ANNOTATED_GTF_GENOME=input_file/STAR_ANALYSED_DATA/index/genome.gtf
+
+for i in $(ls *.fastq | rev | cut -c 9- | rev | uniq)
+
+do
+#quality control of data
+fastqc -o $ANALYSIS_PATH/QC $RAW_DATA/${i}_*.fastq
+echo "FINISH_QC_FST"
+
+#star analysis
+STAR --runMode alignReads --runThreadN 10 --genomeDir $STAR_GENOME_INDX_DIR --sjdbGTFfile $ANNOTATED_GTF_GENOME --readFilesIn $RAW_DATA/${i}_1.fastq $RAW_DATA/${i}_2.fastq --outFileNamePrefix $ANALYSIS_PATH/star_out/${i}_ --outSAMstrandField intronMotif SAM
+echo "FINISH_STAR_ANALYSIS"
+
+#mv sam file
+scp $ANALYSIS_PATH/star_out/${i}_Aligned.out.sam $ANALYSIS_PATH/all_sam_files/
+
+#sorting and indexing of sam file and converting into bam file
+samtools sort -@ 10 -o $ANALYSIS_PATH/sort_sam2bam/sorted_${i}_Aligned.out.bam $ANALYSIS_PATH/all_sam_files/${i}_Aligned.out.sam
+echo "FINISH_SORTING_ANALYSIS"
+
+#samtools index
+samtools index $ANALYSIS_PATH/sort_sam2bam/sorted_${i}_Aligned.out.bam
+echo "FINISH_INDEXING"
+
+#duplicate removal
+picard MarkDuplicates I=$ANALYSIS_PATH/sort_sam2bam/sorted_${i}_Aligned.out.bam O=$ANALYSIS_PATH/duplicate_removal/dup_rm_sorted_${i}_Aligned.out.bam M=$ANALYSIS_PATH/duplicate_removal/dup_${i}.txt REMOVE_DUPLICATES=true ASSUME_SORTED=true
+echo "FINISH_DUPLICATES_REMOVAL"
+
+#cufflinks
+cufflinks -p 10 -o $ANALYSIS_PATH/cufflinks_out/cufflinks_out_star_${i} -G $ANNOTATED_GTF_GENOME $ANALYSIS_PATH/duplicate_removal/dup_rm_sorted_${i}_Aligned.out.bam
+echo "FINISH_CUFFLINKS"
+
+#rename fpkm values
+mv $ANALYSIS_PATH/cufflinks_out/cufflinks_out_star_${i}/genes.fpkm_tracking $ANALYSIS_PATH/cufflinks_out/cufflinks_out_star_${i}/${i}_genes.fpkm_tracking
+
+#scp fpkm values
+scp $ANALYSIS_PATH/cufflinks_out/cufflinks_out_star_${i}/${i}_genes.fpkm_tracking $ANALYSIS_PATH/cufflinks_fpkm_values_star/
+echo "FINISH_COPY_FPKM_FILE"
+
+#convert bam file to fastq file
+samtools fastq -@ 10 $ANALYSIS_PATH/duplicate_removal/dup_rm_sorted_${i}_Aligned.out.bam -1 $ANALYSIS_PATH/bam2fastq/${i}_1.fastq -2 $ANALYSIS_PATH/bam2fastq/${i}_2.fastq
+echo "FINISH_SPLITTING_BAM_FILE"
+
+#fastqc again after duplication removal
+fastqc -o $ANALYSIS_PATH/QC_again/ $ANALYSIS_PATH/bam2fastq/${i}_*.fastq
+
+echo "FINISH_QC_LAST"
+done
+
