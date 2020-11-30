@@ -1,3 +1,105 @@
 #To remove header of fasta file
-sed '/^>/d' foo.fa > out.fa
+$sed '/^>/d' foo.fa > out.fa
 
+# Add > sign in fasta identifier
+$sed '/^>/d' foo.fa > out.fa
+
+#Remove comma from csv file using command line
+sed 's/,/\t/g;' filename
+
+# Extract ziped files
+  #.tgz
+  $tar -xvzf circos-tutorials-0.67.tgz
+  #.gz
+  $gunzip filename.gz 
+  #.zip
+  $unzip filename.zip
+
+#For splitting the sra file into fastq file
+$fastq-dump -O output_dir --split-files --skip-technical *.sra
+
+#gff3 to gtf
+$gffread inputfile.gff3 -T -o output.gtf
+
+#Ques:- compare two files and find the value of file 1 which is not present in file file2 
+$awk 'NR==FNR{a[$1];next}!($1 in a)'  file1.txt file2.txt
+(gives you the values of file1 which id not present in file2)
+
+#Ques:- compare two files and print the values of file2 on the basis of ids present in file1
+$awk 'NR==FNR{arr[$1];next} $1 in arr' file1.txt file2.txt
+(gives you :-
+		File1:
+			Name age class
+			Arun     5      2
+			Ramu     6      3
+			Raja     4      2
+			Sima     6      3
+		File2:
+			Name
+			Arun
+			Raja
+			Sima
+		Output: 	
+			Name age class
+			Arun     5      2
+			Raja     4      2
+			Sima     6      3
+      
+      #Sort file on the basis of column3
+      $sort -u -k3
+      $awk '!a[$3]++'
+#fasta comparison with txt file
+$awk 'NR==FNR{m[">"$1]=$2;next} {sub(/^>/,"&"m[$0])} 1' txt.file fasta.file #with separator "|"
+
+Eg: 
+#input file1
+File1
+>A0A0D3F3V7
+MRILLFWPKRQHLHE
+>A0A0D3HIT8
+MEGRTENDSATYADS
+File2
+A0A0D3F3V7    ObaCBL8
+A0A0D3HIT8    ObaCBL9
+
+#output file
+>ObaCBL8|A0A0D3F3V7
+MRILLFWPKRQHLHE
+>ObaCBL9|A0A0D3HIT8
+MEGRTENDSATYADS
+
+### to remove lines from fasta seq###
+$awk '/^>/ {printf("\n%s\n",$0);next; } { printf("%s",$0);}  END {printf("\n");}' < file.fa > out.fa
+Eg: 
+###################Input file###################
+ >J3N4Z6
+MGCFQSTARRPRPGYEDPVGLANETAFSVSE
+KTFSDADTDQDGRIDRTEWENFVSRNPSLLKI
+>J3NEP5
+MAAGSGAWLLALAVVVAWVAGVAAASLSPPG
+QDLGAQIEYRKLWKWFNFNSEQVDTGQKFIN
+CMPCSRRYVFDVYHDILTGQLQRRDLIETSHS
+##############output file########################
+>J3N4Z6
+MGCFQSTARRPRPGYEDPVGLANETAFSVSEKTFSDADTDQDGRIDRTEWENFVSRNPSLLKI
+>J3NEP5
+MAAGSGAWLLALAVVVAWVAGVAAASLSPPGQDLGAQIEYRKLWKWFNFNSEQVDTGQKFINCMPCSRRYVFDVYHDILTGQLQRRDLIETSHS
+
+# To remove duplicates from the column 1
+$sort -u -k 1,1  mart_export_test.csv
+
+Ques : 
+Os01g0102000	ONIVA09G12740	99.4318
+Os01g0102300	ONIVA09G12730	100
+Os01g0102400	ONIVA09G12720	99.0499
+Os01g0102500	ONIVA07G16830	27.7108
+Os01g0102500	ONIVA09G12710	93.3735
+
+Output :- 
+Os01g0102000	ONIVA09G12740	99.4318
+Os01g0102300	ONIVA09G12730	100
+Os01g0102400	ONIVA09G12720	99.0499
+Os01g0102500	ONIVA07G16830	27.7108
+
+#fasta comparison with txt file
+$awk 'NR==FNR{m[">"$1]=$2;next} {sub(/^>/,"&"m[$0])} 1' txt.file fasta.file
