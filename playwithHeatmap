@@ -1,3 +1,5 @@
+###########___R___############
+
 ###To know how many data are there in each cluster
 HM <- Heatmap(cbioportal, km = 3)
 rcl.list <- row_order(HM)
