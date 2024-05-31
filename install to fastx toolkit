@@ -1,17 +1,3 @@
-Time to Git a Linux Machine
-##
-I'm slowly getting back up and running after moving from my post-doc to an independent position. Other than learning how damn expensive everything is I'm slowly deciding that I should swear off the idea of a new MacPro workstation for a Linux workstation given all the issues I seem to run into with the "not quite so standard Mac OSX10.6 implementation of Unix". But with the idea of sharing my ongoing experiences and a trail I can follow to build my next machine I thought I'd update my thread. I hope some people have found it useful...
-
-Some new idea's and an update
-
-1) I'm becoming increasing certain that I'm getting good enough at command line issues to REALLY mess up my system
-2) My list of used programs continues to increase as I try each new sequencing method
-3) As per issue 1 - I'm also not reading instructions very well. New Rule - If at first you don't succeed...Go back and read the damn instructions again because most likely you didn't follow them correctly!
-
-New Applications to Install
-
-As previously stated in the post if you are using a Mac OS environment you need to do a couple of special things
-
 A) Install Xcode on your system (See earlier post)
 B) Install Fink on your system (See earlier post)
 - install the following fink packages:md5deep and pkgconfig
@@ -22,9 +8,6 @@ D) Create a $PATH Directory and update this directory in your .profile (See earl
 - In my case "$HOME/local/bin"
 
 1) Install FASTX-Toolkit (http://hannonlab.cshl.edu/fastx_toolkit/)
-
-***Why did I get this package***
-Because I have some illumina mate-pair data that I want to analyze with BWA using sampe but the reads need to be reverse complemented to work correctly by my understanding so I'm using the fastx_reverse_complement application in the package that seems to be very fast and correctly reverse complements the reads and reverses the quality values
 
 Instructions:
 - Go to download page and download the following:
@@ -47,15 +30,6 @@ make install
 
 2) Install Bfast, DNAA, and Breakway
 
-*** Why these packages***
-As you might guess from the above install I now have some mate-pair data and want to try out the Breakway package from the UCLA group but it depends on two of their other packages Bfast and DNAA
-
-Bfast - This package seems to be the vain of my existence but thankfully Nils and the helplist have been amazingly helpful
-
-Mac Related Issues: 
-a) You must have fink and have installed the md5deep package otherwise "make check" will fail
-b) The current sourceforge version (0.6.4e) does not install correctly thought the previous version does, however, this is a known issue and has been fixed in the master branch (if that's a new term to you we are in the same boat) but this mean you need to use the git repository version
-c) Using ".configure -prefix=$HOME/local" works but makes DNAA mad when you install it so use sudo (time to be superman again)
 
 Instructions:
 a) In Terminal navigate to ngs/applications
