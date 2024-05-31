@@ -1,27 +1,4 @@
 #!/bin/sh
-
-# Create_NGS_DirectoryStructureV1.sh
-# Created by Jonathan Keats on 4/5/10.
-# This file will create the directory structure needed for the subsequent pipeline
-# To get this script working do one of the following:
-# Option 1 - Open Terminal
-#		Navigate to directory of interest, "Documents" in my case (cd Documents/)
-#		Type "nano Create_NGS_DirectoryStructureV1.sh"
-#                        (This open the unix nano text editor)
-#		Paste from "#!/bin/sh" to "echo Pipeline Directory Structure Created"
-#		Control-O to save, Control-X to exit
-#		Make executable, Type "chmod 755 Create_NGS_DirectoryStructureV1.sh"
-# Option 2 -  Open Xcode
-#		Click "File" and select "New File"
-#		In "Choose a template for your new file" select "Shell Script"
-#		In new file dialogue enter File Name:"Create_NGS_DirectoryStructureV1.sh"
-#		Change location to directory of interest, "Documents" in my case
-#		Click "Finish"
-#		Paste from "#!/bin/sh" to "echo Pipeline Directory Structure Created"
-#		Click "File" and select "Save"
-#		Close the file, which should already be executable
-# Regardless of Option used - type "./Create_NGS_DirectoryStructureV1.sh" to launch
-#
 echo ***Creating Pipeline Directory Structure***
 pwd
 ls
